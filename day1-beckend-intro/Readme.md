@@ -1,2 +1,2 @@
-![Preview](/assets/a.png)
-![Preview](/assets/b.png)
+![Preview](assets/a.png)
+![Preview](assets/b.png)
