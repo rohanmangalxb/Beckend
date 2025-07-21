@@ -32,7 +32,7 @@ app.post('/api/feedback', (req, res) => {
     }
 
     if (rating < 1 || rating > 5) {
-        return res.status(400).json({ error: 'Rating should be in range 0-5' });
+        return res.status(400).json({ error: 'Rating should be in range 1-5' });
     }
 
     res.status(200).json({ message: 'Feedback received', data: req.body });
