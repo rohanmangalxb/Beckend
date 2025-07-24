@@ -1,5 +1,5 @@
 const { where } = require('sequelize');
-const { User } = require('../new/models')
+const { User } = require('../models')
 
 exports.getAll = async (req, res) => {
     const users = await User.findAll({ attributes: { exclude: ['password'] } });
