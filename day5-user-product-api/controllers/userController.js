@@ -28,6 +28,7 @@ exports.deleteUser = async (req, res) => {
 exports.deleteAll = async (req, res) => {
     try {
         const del = await User.destroy({ where: {}, truncate: true });
+
         res.json({ message: 'All users deleted' })
     } catch (err) {
         res.status(500).json({ message: err.message });
