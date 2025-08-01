@@ -3,8 +3,8 @@ const { Product } = require('../models')
 exports.createP = async (req, res) => {
     try {
         const prod = await Product.create({ ...req.body, userId: req.user.id });
-        res.status(201).json(prod)
-    } catch (err) {
+        res.status(201).json(prod)  
+        } catch (err) {
         res.status(400).json({ message: err.message });
     }
 }
@@ -47,7 +47,7 @@ exports.deleteProd = async (req, res) => {
 
     if (!prod || prod.userId != req.user.id) {
         return res.status(403).json({ message: 'Product not found or not allowed' });
-    } 
+    }
 
     await prod.destroy();
     res.json({message: "Prod delete"})
