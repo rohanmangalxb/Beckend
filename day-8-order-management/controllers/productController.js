@@ -1,8 +1,9 @@
-const Products  = require('../models/');
+const { Product } = require('../models/');
+const sequelize = require('../config/db')
 
 exports.create = async (req, res) => {
     try {
-        const prod = await Products.create({ ...req.body, userId: req.user.id })
+        const prod = await Product.create({ ...req.body, userId: req.user.id })
         res.status(201).json({ message: 'Product added to user', user: req.user, product: prod })
 
     } catch (err) {
@@ -12,7 +13,7 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        const prod = await Products.findAll();
+        const prod = await Product.findAll();
         res.status(201).json(prod)
     } catch (err) {
         res.status(500).json({ message: `Error fetching all products: ${err.message}` })
@@ -21,8 +22,10 @@ exports.getAll = async (req, res) => {
 
 exports.byId = async (req, res) => {
     try {
-        const prod = await Products.findByPk(req.params.id)
+        const prod = await Product.findByPk(req.params.id)
         if (!prod) return res.status(404).json({ message: `Error fetching product by id: Product not Found` })
+
+        res.json({prod})
     } catch (err) {
         res.status(500).json({ message: `Error fetching product by id: ${err.message}` })
     }
@@ -30,10 +33,11 @@ exports.byId = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const prod = await Products.findByPk(req.params.id)
-
-        if (!prod || prod.userId !== req.params.id) return res.status(403).json({ message: `Error fetching product by id: Product not found or not allowed` });
-
+        const prod = await Product.findByPk(req.params.id)
+        if (!prod) return res.status(403).json({ message: `Error fetching product by id: Product not found or not allowed` });
+        
+        await prod.update(req.body)
+        res.json({message: 'Product updated', prod})
     } catch (err) {
         res.status(500).json({ message: `Error updating product: ${err.message}` })
     }
@@ -49,5 +53,18 @@ exports.delete = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: `Error deleting product: ${err.message}` })
+    }
+}
+
+exports.deleteAll = async (req, res) => {
+    try {
+        await Product.destroy({ where: {} })
+
+        await sequelize.query('ALTER TABLE Products AUTO_INCREMENT = 1');
+
+        res.json({ message: "All Product removed" })
+    } catch (err) {
+        res.status(500).json({ message: `Error deleting all product: ${err.message}` })
+
     }
 }
