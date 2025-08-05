@@ -1,17 +1,33 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-
+import { cardContext } from '../context/context'
+// import { useState } from 'react'
 
 const Navbar = () => {
+
+    const cardVal = useContext(cardContext)
+
     return (
         <nav className='flex justify-between bg-black text-white h-13 items-center p-1'>
-            <div className="logo px-5 font-bold text-lg">
+            <div onClick={() => cardVal.setCard('prod')} className="logo px-5 font-bold text-lg">
                 <NavLink to={'/'}>Prodesk</NavLink>
             </div>
+            <div className='w-2/3 flex justify-between items-center gap-4'>
+                <div className="searchBar bg-slate-700 w-full rounded-2xl p-1 flex items-center h-10">
+                    <input
+                        className='w-full h-full px-5 py-2 rounded-xl bg-slate-700 text-white placeholder-gray-300 focus:outline-none'
+                        type="text"
+                        placeholder='Search items'
+                    />
+                </div>
 
-            <div className="searchBar bg-white">
-                <input type="text" />
+                <ul className='flex gap-10'>
+                    <li onClick={() => cardVal.setCard('prod')} className='cursor-pointer'><NavLink to={'/'}></NavLink> Dashboard</li>
+                    <li onClick={() => cardVal.setCard('product')} className='cursor-pointer'><NavLink to={'/'}></NavLink> Products</li>
+                    <li onClick={() => cardVal.setCard('orders')} className='cursor-pointer'><NavLink to={'/orders'}></NavLink> Orders</li>
+                </ul>
             </div>
+
 
             <div className="userOptions flex gap-5 px-4">
                 <NavLink to={'/login'}>Login</NavLink>
