@@ -1,12 +1,9 @@
 import Navbar from '../components/Navbar'
 import ProductCard from '../components/ProductCard'
 import MyOrders from './MyOrders'
-import { useContext } from 'react'
-import { cardContext } from '../context/context'
 
 const Dashboard = () => {
-    const cardVal = useContext(cardContext)
-
+    const cardVal = 'product'
     return (
         <>
             <Navbar />

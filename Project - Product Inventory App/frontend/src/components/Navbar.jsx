@@ -1,15 +1,13 @@
 import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { cardContext } from '../context/context'
 // import { useState } from 'react'
 
 const Navbar = () => {
 
-    const cardVal = useContext(cardContext)
 
     return (
         <nav className='flex justify-between bg-black text-white h-13 items-center p-1'>
-            <div onClick={() => cardVal.setCard('prod')} className="logo px-5 font-bold text-lg">
+            <div className="logo px-5 font-bold text-lg">
                 <NavLink to={'/'}>Prodesk</NavLink>
             </div>
             <div className='w-2/3 flex justify-between items-center gap-4'>
@@ -22,9 +20,9 @@ const Navbar = () => {
                 </div>
 
                 <ul className='flex gap-10'>
-                    <li onClick={() => cardVal.setCard('prod')} className='cursor-pointer'><NavLink to={'/'}></NavLink> Dashboard</li>
-                    <li onClick={() => cardVal.setCard('product')} className='cursor-pointer'><NavLink to={'/'}></NavLink> Products</li>
-                    <li onClick={() => cardVal.setCard('orders')} className='cursor-pointer'><NavLink to={'/orders'}></NavLink> Orders</li>
+                    <li ><NavLink to={'/'}></NavLink> Dashboard</li>
+                    <li ><NavLink to={'/'}></NavLink> Products</li>
+                    <li ><NavLink to={'/orders'}></NavLink> Orders</li>
                 </ul>
             </div>
 
