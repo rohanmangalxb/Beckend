@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
 
 const AdminProductList = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useSt`ate([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,12 +42,12 @@ const AdminProductList = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Manage Products</h1>
-        <Link
+        <NavLink
           to="/admin/add-product"
           className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-300"
         >
           Add Product
-        </Link>
+        </NavLink>
       </div>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -69,12 +69,7 @@ const AdminProductList = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.price}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.quantity}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link
-                    to={`/admin/edit-product/${product.id}`}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    Edit
-                  </Link>
+
                   <button
                     onClick={() => handleDelete(product.id)}
                     className="text-red-600 hover:text-red-900"
