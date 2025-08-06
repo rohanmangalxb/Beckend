@@ -5,9 +5,6 @@ const {authorize : auth, roleAuthorise : role} = require('../middleware/auth');
 
 router.post('/register', Controller.registerUser)
 router.post('/login', Controller.loginUser)
-router.get('/profile', auth, Controller.viewProfile)
-
-router.delete('/:id',auth, role(['admin']), Controller.deleteUser)
-router.delete('/',auth, role(['admin']), Controller.deleteAll)
+router.get('/me', auth, Controller.viewProfile)
 
 module.exports = router

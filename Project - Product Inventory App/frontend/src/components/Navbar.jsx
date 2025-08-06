@@ -1,9 +1,12 @@
 import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 // import { useState } from 'react'
 
 const Navbar = () => {
 
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
     return (
         <nav className='flex justify-between bg-black text-white h-13 items-center p-1'>
@@ -19,11 +22,30 @@ const Navbar = () => {
                     />
                 </div>
 
-                <ul className='flex gap-10'>
-                    <li ><NavLink to={'/'}></NavLink> Dashboard</li>
-                    <li ><NavLink to={'/'}></NavLink> Products</li>
-                    <li ><NavLink to={'/orders'}></NavLink> Orders</li>
-                </ul>
+                <div className="flex gap-10">
+                    {user ? (
+                        <>
+                            {user.role === 'admin' && (
+                                <NavLink to="/admin/products" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">
+                                    Admin Dashboard
+                                </NavLink>
+                            )}
+                            <NavLink to="/my-orders" className="w-[80px]">
+                                My Orders
+                            </NavLink>
+                        </>
+                    ) : (
+                        <>
+                            <NavLink to="/login" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">
+                                Login
+                            </NavLink>
+                            <NavLink to="/register" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-gray-200 transition duration-300">
+                                Register
+                            </NavLink>
+                        </>
+                    )}
+                </div>
+
             </div>
 
 

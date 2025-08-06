@@ -3,8 +3,8 @@ const sequelize = require('../config/db')
 
 exports.create = async (req, res) => {
     try {
-        const prod = await Product.create({ ...req.body, userId: req.user.id })
-        res.status(201).json({ message: 'Product added to user', user: req.user, product: prod })
+        const prod = await Product.create(req.body)
+        res.status(201).json({ message: 'Product created', product: prod })
 
     } catch (err) {
         res.status(500).json({ message: `Error creating product: ${err.message}` })
@@ -37,7 +37,7 @@ exports.update = async (req, res) => {
         if (!prod) return res.status(403).json({ message: `Error fetching product by id: Product not found or not allowed` });
         
         await prod.update(req.body)
-        res.json({message: 'Product updated', prod})
+        res.json({message: 'Product updated', product: prod})
     } catch (err) {
         res.status(500).json({ message: `Error updating product: ${err.message}` })
     }
@@ -47,24 +47,11 @@ exports.delete = async (req, res) => {
     try {
         const prod = await Product.findByPk(req.params.id)
 
-        if (!prod || prod.userId != req.user.id) return res.status(403).json({ message: 'Product not found or not allowed' });
+        if (!prod) return res.status(403).json({ message: 'Product not found' });
         await prod.destroy();
         res.json({ message: "Product removed" })
 
     } catch (err) {
         res.status(500).json({ message: `Error deleting product: ${err.message}` })
-    }
-}
-
-exports.deleteAll = async (req, res) => {
-    try {
-        await Product.destroy({ where: {} })
-
-        await sequelize.query('ALTER TABLE Products AUTO_INCREMENT = 1');
-
-        res.json({ message: "All Product removed" })
-    } catch (err) {
-        res.status(500).json({ message: `Error deleting all product: ${err.message}` })
-
     }
 }

@@ -8,12 +8,18 @@ exports.registerUser = async (req, res) => {
     try {
         const { name, email, password, role = 'user' } = req.body
 
-        if (!name || !email || !password || role !== 'admin' && role !== 'user') throw new Error('Invalid Input for registration')
+        if (!name?.trim() || !email?.trim() || !password?.trim()) {
+            return res.status(400).json({
+                message: 'Please provide name, email and password'
+            });
+        }
 
         const hashed = await bcrypt.hash(password, 10);
 
-        const user = await User.create({ name, email, password: hashed, role })
-        res.status(201).json({ message: 'User Registered!', user })
+        const user = await User.create({ name, email: email.toLowerCase().trim(), password: hashed, role })
+
+        const result = {...user.get(), password: undefined}
+        res.status(201).json({ message: 'User Registered!', result })
 
     } catch (err) {
         res.status(500).json({ error: `Error at registration: ${err.message}` })
@@ -25,8 +31,12 @@ exports.loginUser = async (req, res) => {
     console.log('Logging')
 
     try {
-
         const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Please provide an email and password' });
+        }
+
         const user = await User.findOne({ where: { email } })
 
         if (!user) return res.status(404).json({ message: "User not registered!" })
@@ -48,38 +58,10 @@ exports.viewProfile = async (req, res) => {
     console.log('View')
 
     try {
-        res.json({ user: req.user })
+        const user = await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } })
+        res.status(200).json({ data: user });
+
     } catch (err) {
         res.status(500).json({ error: `Error at viewProfile: ${err.message}` })
-    }
-}
-
-exports.deleteUser = async (req, res) => {
-
-    if (req.user.role !== 'admin' && req.user.id !== parseInt(req.params.id)) {
-        return res.status(403).json({ message: 'Unauthorized to delete this user' });
-    }
-
-    try {
-        const del = await User.destroy({ where: { id: req.params.id } });
-        if (!del) return res.status(404).json({ message: 'User not found' });
-        res.json({ message: 'User Deleted' });
-    } catch (err) {
-        res.status(500).json({ error: `Error deleting user: ${err.message}` });
-    }
-
-}
-
-exports.deleteAll = async (req, res) => {
-    try {
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-
-        await sequelize.query('TRUNCATE TABLE users');
-
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
-
-    } catch (err) {
-
-        res.status(500).json({ error: `Error deleting all user: ${err.message}` });
     }
 }

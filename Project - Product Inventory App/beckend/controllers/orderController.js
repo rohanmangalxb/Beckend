@@ -2,11 +2,6 @@ const { Orders, Product, User, OrderItems } = require('../models');
 const jwt = require('jsonwebtoken');
 const sequelize = require('../config/db')
 
-// POST /api/orders – Create order ( requires token ) //
-// GET /api/orders/user/:userId – Get user's orders 
-// GET /api/orders – Admin can view all 
-// PUT /api/orders/:id – Update order status 
-// DELETE /api/orders/:id 
 
 exports.create = async (req, res) => {
     try {
@@ -55,9 +50,8 @@ exports.create = async (req, res) => {
 
 exports.getUserOrder = async (req, res) => {
     try {
-        const userId = req.params.userId
 
-        const orders = await Orders.findAll({ where: { userId }, include: [{ model: Product }] })
+        const orders = await Orders.findAll({ where: { userId: req.user.id } })
 
         res.status(201).json(orders)
     } catch (err) {
@@ -67,19 +61,9 @@ exports.getUserOrder = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        const { status, startDate, endDate } = req.query;
-
-        const sql = {};
-        if (status) sql.status = status;
-        if (startDate && endDate) {
-            sql.createdAt = {
-                [require('sequelize').Op.between]: [new Date(startDate), new Date(endDate)]
-            };
-        }
 
         const orders = await Orders.findAll({
-            where: sql,
-            include: [{ model: Product }, { model: User }]
+            include: [{ model: User, attributes: ['name', 'email'] }]
         });
 
         res.json(orders);
@@ -96,9 +80,7 @@ exports.updateStatus = async (req, res) => {
 
         if (!order) return res.status(404).json({ message: `Order Not found` })
 
-        order.status = status;
-
-        await order.save()
+        await order.update({ status: status });
 
         res.json({ message: 'Order updated Successfully', order })
 
@@ -121,20 +103,4 @@ exports.delete = async (req, res) => {
 
     }
 
-}
-
-exports.deleteAll = async (req, res) => {
-    try {
-        await OrderItems.destroy({ where: {} });
-        await Orders.destroy({ where: {} });
-
-        await sequelize.query('ALTER TABLE Orders AUTO_INCREMENT = 1');
-        await sequelize.query('ALTER TABLE OrderItems AUTO_INCREMENT = 1');
-
-
-        res.json('All deleted')
-    } catch (err) {
-        res.status(500).json({ message: `Error deleting All Order: ${err.message}` });
-
-    }
 }

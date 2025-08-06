@@ -12,12 +12,21 @@ const User = sequelize.define('User', {
         unique: true,
         validate: {
             isEmail: true
+        },
+        set(value) {
+            this.setDataValue('email', value.toLowerCase().trim());
         }
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Password cannot be empty'
+            },
+        }
     },
+
     role: {
         type: DataTypes.ENUM('admin', 'user'),
         defaultValue: 'user'
