@@ -57,7 +57,6 @@ const useAuth = () => {
         }
     };
 
-    // Initialize auth state
     const initAuth = async () => {
         const token = localStorage.getItem('token');
         if (token) await verifyToken(token);
