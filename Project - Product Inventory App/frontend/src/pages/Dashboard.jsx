@@ -13,7 +13,7 @@ const Dashboard = () => {
         const fetchProducts = async () => {
             try {
                 const response = await api.get('/products');
-                // Handle different API response structures
+
                 const productsData = response.data?.data || response.data || [];
                 setProducts(Array.isArray(productsData) ? productsData : []);
             } catch (err) {
@@ -45,30 +45,6 @@ const Dashboard = () => {
                     <p className="text-lg mb-6">
                         Get started by managing your <span className="font-semibold">Products</span> or checking your <span className="font-semibold">Orders</span>.
                     </p>
-
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
-                        <div
-                            onClick={() => setActiveTab('products')}
-                            className={`p-6 rounded-lg shadow hover:shadow-lg transition-all duration-200 cursor-pointer group ${activeTab === 'products'
-                                ? 'bg-blue-100 border border-blue-300'
-                                : 'bg-slate-100 hover:bg-slate-200'
-                                }`}
-                        >
-                            <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">Manage Products</h3>
-                            <p className="text-sm text-gray-600">Add, edit, or delete your inventory items.</p>
-                        </div>
-
-                        <div
-                            onClick={() => setActiveTab('orders')}
-                            className={`p-6 rounded-lg shadow hover:shadow-lg transition-all duration-200 cursor-pointer group ${activeTab === 'orders'
-                                ? 'bg-blue-100 border border-blue-300'
-                                : 'bg-slate-100 hover:bg-slate-200'
-                                }`}
-                        >
-                            <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600">Track Orders</h3>
-                            <p className="text-sm text-gray-600">View and manage your customer orders.</p>
-                        </div>
-                    </div> */}
 
                     {activeTab === 'products' && (
                         <div className="mt-8">
