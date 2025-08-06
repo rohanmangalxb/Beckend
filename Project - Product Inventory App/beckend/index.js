@@ -15,7 +15,7 @@ const ORDERS = require('./routes/orderRoutes');
 
 app.use(cors());
 
-// Or configure specific origins
+
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
