@@ -5,11 +5,11 @@ const authorize = async (req, res, next) => {
     try {
         let token;
 
-        // Check cookies first
+
         if (req.cookies?.token) {
             token = req.cookies.token;
         }
-        // Then check authorization header
+
         else if (req.headers?.authorization?.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
         }
